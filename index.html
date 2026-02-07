@@ -163,23 +163,19 @@
       </form>
 
       <div class="footer">
-        If you have trouble using this form, you can contact: <a id="supportEmailLink" href="#">support@YOURDOMAIN.com</a>
+        If you have trouble using this form, you can contact:
+        <a id="supportEmailLink" href="#">foxtailapp-help@outlook.com</a>
       </div>
     </div>
   </div>
 
   <script>
     /**
-     * CONFIG — set ONE of these endpoints:
-     *
-     * Option A (recommended): Formspree endpoint:
-     *   https://formspree.io/f/xxxxxxx
-     *
-     * Option B: Your API endpoint (Render/other) that accepts POST JSON:
-     *   https://your-backend.example.com/account-deletion-request
+     * CONFIG — set your Render endpoint:
+     *   https://openai-proxy-bn1v.onrender.com/account-deletion-request
      */
     const FORM_ENDPOINT = "PASTE_YOUR_ENDPOINT_HERE";
-    const SUPPORT_EMAIL = "support@YOURDOMAIN.com";
+    const SUPPORT_EMAIL = "foxtailapp-help@outlook.com";
     const APP_NAME = "Foxtail";
 
     const form = document.getElementById("deleteForm");
@@ -265,8 +261,6 @@
       try {
         const payload = buildPayload();
 
-        // If it's Formspree, it accepts JSON with appropriate headers.
-        // If it's your own endpoint, same works if you accept JSON.
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: {
