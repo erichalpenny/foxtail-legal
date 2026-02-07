@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <title>Foxtail — Delete Account Request</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --text:#e7ecff; --muted:#a9b3d6;
+      --accent:#7aa2ff; --danger:#ff6b6b; --ok:#39d98a; --border:#263159;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f6f8ff; --card:#ffffff; --text:#0b1020; --muted:#4c557a; --border:#dde3ff; }
+    }
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(122,162,255,.18), transparent 60%),
+                  radial-gradient(900px 500px at 80% 10%, rgba(57,217,138,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.35;
+    }
+    .wrap{ max-width: 900px; margin: 0 auto; padding: 40px 18px; }
+    .card{
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.20);
+    }
+    h1{ font-size: 28px; margin: 0 0 10px; }
+    p{ margin: 10px 0; color: var(--muted); }
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;}
+    @media (max-width: 720px){ .grid{ grid-template-columns: 1fr; } }
+    label{ display:block; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    input, textarea, select{
+      width:100%;
+      box-sizing:border-box;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 85%, #0000);
+      color: var(--text);
+      outline: none;
+    }
+    textarea{ min-height: 110px; resize: vertical; }
+    .row{ margin-top: 14px; }
+    .small{ font-size: 13px; color: var(--muted); }
+    .actions{ display:flex; gap: 12px; align-items:center; margin-top: 18px; flex-wrap: wrap; }
+    button{
+      border: 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #08102b;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button:disabled{ opacity:.6; cursor:not-allowed; }
+    .secondary{
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .notice{
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      margin-top: 14px;
+    }
+    .status{
+      margin-top: 12px; padding: 10px 12px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 90%, transparent);
+      color: var(--text);
+      display:none;
+    }
+    .status.ok{ border-color: color-mix(in srgb, var(--ok) 55%, var(--border)); }
+    .status.err{ border-color: color-mix(in srgb, var(--danger) 55%, var(--border)); }
+    .footer{ margin-top: 18px; font-size: 13px; color: var(--muted); }
+    .hp{ display:none !important; }
+    a{ color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Foxtail — Delete Account Request</h1>
+      <p>Use this form to request deletion of your Foxtail account and associated data.</p>
+
+      <div class="notice">
+        <div style="font-weight:800; margin-bottom:6px;">What happens next</div>
+        <div class="small">
+          We’ll verify your request and process deletion. Typical completion: <b>within 30 days</b>.
+          Some records may be retained if required for security, fraud prevention, or legal compliance.
+        </div>
+      </div>
+
+      <form id="deleteForm" autocomplete="on">
+        <!-- Honeypot (spam trap) -->
+        <div class="hp">
+          <label>Leave this field blank</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="email">Email (used in the app)</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            <div class="small">Use the email tied to your account, if applicable.</div>
+          </div>
+          <div>
+            <label for="username">Username (if you have one)</label>
+            <input id="username" name="username" type="text" placeholder="Optional" />
+            <div class="small">If your app uses email only, you can leave this blank.</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="requestType">Request</label>
+            <select id="requestType" name="requestType" required>
+              <option value="delete_account_and_data" selected>Delete my account and associated data</option>
+              <option value="delete_data_only">Delete my data but keep my account (if supported)</option>
+            </select>
+          </div>
+          <div>
+            <label for="platform">Platform</label>
+            <select id="platform" name="platform" required>
+              <option value="android" selected>Android</option>
+              <option value="ios">iOS</option>
+              <option value="web">Web</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="details">Additional details (optional)</label>
+          <textarea id="details" name="details" placeholder="If helpful: approximate last login date, any in-app display name, etc."></textarea>
+        </div>
+
+        <div class="row">
+          <label style="display:flex; gap:10px; align-items:flex-start; font-weight:700;">
+            <input id="confirm" type="checkbox" required style="width:auto; margin-top:3px;" />
+            <span>
+              I confirm I want Foxtail to process this deletion request.
+              <span class="small">We may contact you to verify ownership.</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" type="submit">Submit request</button>
+          <button class="secondary" type="button" id="emailFallbackBtn">Email this request instead</button>
+          <span class="small" id="hint"></span>
+        </div>
+
+        <div id="status" class="status"></div>
+      </form>
+
+      <div class="footer">
+        If you have trouble using this form, you can contact: <a id="supportEmailLink" href="#">support@YOURDOMAIN.com</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * CONFIG — set ONE of these endpoints:
+     *
+     * Option A (recommended): Formspree endpoint:
+     *   https://formspree.io/f/xxxxxxx
+     *
+     * Option B: Your API endpoint (Render/other) that accepts POST JSON:
+     *   https://your-backend.example.com/account-deletion-request
+     */
+    const FORM_ENDPOINT = "PASTE_YOUR_ENDPOINT_HERE";
+    const SUPPORT_EMAIL = "support@YOURDOMAIN.com";
+    const APP_NAME = "Foxtail";
+
+    const form = document.getElementById("deleteForm");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
+    const hintEl = document.getElementById("hint");
+    const supportEmailLink = document.getElementById("supportEmailLink");
+    const emailFallbackBtn = document.getElementById("emailFallbackBtn");
+
+    supportEmailLink.textContent = SUPPORT_EMAIL;
+    supportEmailLink.href = `mailto:${SUPPORT_EMAIL}`;
+
+    function setStatus(kind, msg) {
+      statusEl.className = "status " + (kind || "");
+      statusEl.textContent = msg;
+      statusEl.style.display = "block";
+    }
+
+    function clearStatus() {
+      statusEl.style.display = "none";
+      statusEl.textContent = "";
+      statusEl.className = "status";
+    }
+
+    function isConfigured() {
+      return FORM_ENDPOINT && !FORM_ENDPOINT.includes("PASTE_YOUR_ENDPOINT_HERE");
+    }
+
+    function buildPayload() {
+      return {
+        app: APP_NAME,
+        email: document.getElementById("email").value.trim(),
+        username: document.getElementById("username").value.trim(),
+        requestType: document.getElementById("requestType").value,
+        platform: document.getElementById("platform").value,
+        details: document.getElementById("details").value.trim(),
+        submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      };
+    }
+
+    function buildMailto() {
+      const p = buildPayload();
+      const subject = encodeURIComponent(`[${APP_NAME}] Account deletion request`);
+      const body = encodeURIComponent(
+        `Account deletion request\n\n` +
+        `Email: ${p.email}\n` +
+        `Username: ${p.username || "(not provided)"}\n` +
+        `Request: ${p.requestType}\n` +
+        `Platform: ${p.platform}\n` +
+        `Details: ${p.details || "(none)"}\n` +
+        `SubmittedAt: ${p.submittedAt}\n`
+      );
+      return `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    emailFallbackBtn.addEventListener("click", () => {
+      window.location.href = buildMailto();
+    });
+
+    if (!isConfigured()) {
+      hintEl.textContent = "Admin: set FORM_ENDPOINT in the page source to enable online submission.";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearStatus();
+
+      // Honeypot check
+      const hp = document.getElementById("website").value.trim();
+      if (hp.length > 0) return; // silently drop bots
+
+      if (!isConfigured()) {
+        setStatus("err",
+          "This page is not fully configured yet. Please use the “Email this request instead” button."
+        );
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting…";
+
+      try {
+        const payload = buildPayload();
+
+        // If it's Formspree, it accepts JSON with appropriate headers.
+        // If it's your own endpoint, same works if you accept JSON.
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          let msg = `Submission failed (HTTP ${res.status}).`;
+          try {
+            const data = await res.json();
+            if (data && data.error) msg += " " + data.error;
+          } catch (_) {}
+          throw new Error(msg);
+        }
+
+        setStatus("ok",
+          "Request received. If we need verification, we’ll contact you. You can close this page."
+        );
+        form.reset();
+      } catch (err) {
+        setStatus("err",
+          (err && err.message ? err.message : "Submission failed.") +
+          " You can use the “Email this request instead” button."
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit request";
+      }
+    });
+  </script>
+</body>
+</html>
