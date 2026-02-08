@@ -124,8 +124,9 @@
             <label for="requestType">Request</label>
             <select id="requestType" name="requestType" required>
               <option value="delete_account_and_data" selected>Delete my account and associated data</option>
-              <option value="delete_data_only">Delete my data but keep my account (if supported)</option>
+              <option value="delete_data_only">Delete my data only (if supported)</option>
             </select>
+            <div class="small">If “data only” isn’t supported, choose “account and data.”</div>
           </div>
           <div>
             <label for="platform">Platform</label>
@@ -165,18 +166,22 @@
       <div class="footer">
         If you have trouble using this form, you can contact:
         <a id="supportEmailLink" href="#">foxtailapp-help@outlook.com</a>
+        &nbsp;·&nbsp;
+        <a id="privacyPolicyLink" href="#" target="_blank" rel="noopener">Privacy Policy</a>
       </div>
     </div>
   </div>
 
   <script>
     /**
-     * CONFIG — set your Render endpoint:
-     *   "https://foxtail-proxy-py.onrender.com/account-deletion-request"
+     * CONFIG
      */
     const FORM_ENDPOINT = "https://foxtail-proxy-py.onrender.com/account-deletion-request";
     const SUPPORT_EMAIL = "foxtailapp-help@outlook.com";
     const APP_NAME = "Foxtail";
+
+    // Set this to your public privacy policy URL (must be public)
+    const PRIVACY_POLICY_URL = ""; // e.g. "https://erichalpenny.github.io/foxtail-legal/privacy.html"
 
     const form = document.getElementById("deleteForm");
     const statusEl = document.getElementById("status");
@@ -184,9 +189,18 @@
     const hintEl = document.getElementById("hint");
     const supportEmailLink = document.getElementById("supportEmailLink");
     const emailFallbackBtn = document.getElementById("emailFallbackBtn");
+    const privacyPolicyLink = document.getElementById("privacyPolicyLink");
 
     supportEmailLink.textContent = SUPPORT_EMAIL;
     supportEmailLink.href = `mailto:${SUPPORT_EMAIL}`;
+
+    // Privacy Policy link: show only if configured
+    if (PRIVACY_POLICY_URL && PRIVACY_POLICY_URL.trim().length > 0) {
+      privacyPolicyLink.href = PRIVACY_POLICY_URL.trim();
+    } else {
+      // Hide the link if you haven't set it yet
+      privacyPolicyLink.style.display = "none";
+    }
 
     function setStatus(kind, msg) {
       statusEl.className = "status " + (kind || "");
@@ -200,8 +214,10 @@
       statusEl.className = "status";
     }
 
+    // Only disable online submission if someone leaves the placeholder value in place.
+    const PLACEHOLDER_ENDPOINT = "https://YOUR_RENDER_SERVICE_URL/account-deletion-request";
     function isConfigured() {
-      return FORM_ENDPOINT && !FORM_ENDPOINT.includes("https://foxtail-proxy-py.onrender.com/account-deletion-request");
+      return !!FORM_ENDPOINT && FORM_ENDPOINT !== PLACEHOLDER_ENDPOINT;
     }
 
     function buildPayload() {
@@ -213,7 +229,8 @@
         platform: document.getElementById("platform").value,
         details: document.getElementById("details").value.trim(),
         submittedAt: new Date().toISOString(),
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
+        website: document.getElementById("website").value.trim() // honeypot support
       };
     }
 
@@ -249,7 +266,8 @@
       if (hp.length > 0) return; // silently drop bots
 
       if (!isConfigured()) {
-        setStatus("err",
+        setStatus(
+          "err",
           "This page is not fully configured yet. Please use the “Email this request instead” button."
         );
         return;
@@ -279,12 +297,14 @@
           throw new Error(msg);
         }
 
-        setStatus("ok",
+        setStatus(
+          "ok",
           "Request received. If we need verification, we’ll contact you. You can close this page."
         );
         form.reset();
       } catch (err) {
-        setStatus("err",
+        setStatus(
+          "err",
           (err && err.message ? err.message : "Submission failed.") +
           " You can use the “Email this request instead” button."
         );
