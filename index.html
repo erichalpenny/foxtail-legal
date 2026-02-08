@@ -172,9 +172,9 @@
   <script>
     /**
      * CONFIG — set your Render endpoint:
-     *   https://openai-proxy-bn1v.onrender.com/account-deletion-request
+     *   "https://foxtail-proxy-py.onrender.com/account-deletion-request"
      */
-    const FORM_ENDPOINT = "PASTE_YOUR_ENDPOINT_HERE";
+    const FORM_ENDPOINT = "https://foxtail-proxy-py.onrender.com/account-deletion-request";
     const SUPPORT_EMAIL = "foxtailapp-help@outlook.com";
     const APP_NAME = "Foxtail";
 
@@ -201,7 +201,7 @@
     }
 
     function isConfigured() {
-      return FORM_ENDPOINT && !FORM_ENDPOINT.includes("PASTE_YOUR_ENDPOINT_HERE");
+      return FORM_ENDPOINT && !FORM_ENDPOINT.includes("https://foxtail-proxy-py.onrender.com/account-deletion-request");
     }
 
     function buildPayload() {
